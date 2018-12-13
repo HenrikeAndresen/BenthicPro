@@ -1,0 +1,45 @@
+BenthicPB <-
+function (data)
+{
+  with(data, {
+    if (!all(c(Mollusca, Annelida, Crustacea, Echinodermata, Insecta, Sessile, Crawler, FacultativeSwimmer,Herbivore, Omnivore, Carnivore,Lake, River,Marine) %in% c(0,1)) ) stop ("Taxa, traits and habitats must be coded as 0 and 1.\n")
+
+    if(!all(rowSums(data[,c("Mollusca", "Annelida", "Crustacea", "Echinodermata", "Insecta")])==1)) stop("Exactly one taxon value per row must be 1.\n")
+    if(!all(rowSums(data[,c("Sessile", "Crawler", "FacultativeSwimmer")])==1)) stop("Exactly one movement trait value per row must be 1.\n")
+    if(!all(rowSums(data[,c("Herbivore","Omnivore", "Carnivore")])==1)) stop("Exactly one diet category value per row must be 1.\n")
+    if(!all(rowSums(data[,c("Lake", "River", "Marine")])==1)) stop("Exactly one habitat value per row must be 1.\n")
+
+ANN_1_H1<-tanh(0.5*(13.2741148740669-0.562570354038153*log10(Bodymass)  -4553.56737518261*1/(273.15+Temperature)  -0.204157614236219*log10(Depth) + 0.0204756542940373*(Mollusca*2-1)  -1.41287378359407*(Annelida*2-1) + 0.287947758878353*(Crustacea*2-1)  -4.07710345624521*(Echinodermata*2-1) + 0.521681750308232*(Insecta*2-1)  -0.00541012040489414*(Infauna*2-1) + 0.145679740584035*(Sessile*2-1) +0.125342449448546*(Crawler*2-1) + 0.26637519421357*(FacultativeSwimmer*2-1) + 1.13752993616782*(Herbivore*2-1) + 1.08278206453698*(Omnivore*2-1) + 1.06914729129867*(Carnivore*2-1)  -1.16567859591409*(Lake*2-1) + 0.296660895400511*(River*2-1) + 0.387325117342932*(Marine*2-1) + 0.0761954078348966*(Subtidal*2-1) + 0.291885337280014*(Exploited*2-1)))
+ANN_1_H2<-tanh(0.5*(60.5132940418227-1.2970714977299*log10(Bodymass)  -14435.4416116042*1/(273.15+Temperature) + 0.160014453933558*log10(Depth)  -1.0653826163795*(Mollusca*2-1) + 8.17966341678558*(Annelida*2-1)  -1.89872466321032*(Crustacea*2-1) + 5.52792624867608*(Echinodermata*2-1)  -1.78203568792342*(Insecta*2-1)      -0.549186520153608*(Infauna*2-1) + 0.22743463148477*(Sessile*2-1)      + 1.11787314993074*(Crawler*2-1) + 1.03662813470851*(FacultativeSwimmer*2-1) + 0.128732842977029*(Herbivore*2-1) +0.0632162067509736*(Omnivore*2-1)+ 0.474149084407594*(Carnivore*2-1)+4.67819985385182*(Lake*2-1) + 1.42715488966364*(River*2-1)   -2.3817794397253*(Marine*2-1) + 0.645084739548577*(Subtidal*2-1)  -1.70942159204077*(Exploited*2-1)))
+ANN_1_log_productivity<-0.602134097692791+1.09640537125434*ANN_1_H1+0.678725315338285*ANN_1_H2
+
+ANN_2_H1<-tanh(0.5*(13.3254598857873-0.332145389158074*log10(Bodymass)  -3212.3199038761*1/(273.15+Temperature)  +0.32111642289285*log10(Depth) + 0.556237409700199*(Mollusca*2-1)  +0.72650118292702*(Annelida*2-1) + 0.0608900939026745*(Crustacea*2-1) + 0.346110600662567*(Echinodermata*2-1) -0.413288202905506*(Insecta*2-1)  -0.08475732131163724*(Infauna*2-1) -0.254480789479052*(Sessile*2-1) +	0.2084359718497596*(Crawler*2-1) + 0.0801773151387145*(FacultativeSwimmer*2-1) + 	0.0746247776827283*(Herbivore*2-1)  -0.154613510822308*(Omnivore*2-1) + 0.218339553618964*(Carnivore*2-1)  -0.151632123443009*(Lake*2-1)  -0.184402889892304*(River*2-1) + 0.234834301656541*(Marine*2-1)  -0.0930939009222794*(Subtidal*2-1) + 0.323223361893706*(Exploited*2-1)))
+ANN_2_H2<-tanh(0.5*(-1.80873162378225+0.0296907231150187*log10(Bodymass)  +343.575349083567*1/(273.15+Temperature) -0.188710804514825*log10(Depth) -0.297267131631526*(Mollusca*2-1) -0.32945727492258*(Annelida*2-1) -0.0381827017680866*(Crustacea*2-1) -0.260694641102407*(Echinodermata*2-1) +0.28362252353719*(Insecta*2-1)  +0.0388378378564553*(Infauna*2-1) + 	0.0990786691641606*(Sessile*2-1)   -0.0945744482438143*(Crawler*2-1) + 0.0003870214498125*(FacultativeSwimmer*2-1)  	-0.0346268023906846*(Herbivore*2-1) +0.074812719934015*(Omnivore*2-1)-0.101911228540515*(Carnivore*2-1)+0.0549329187531706*(Lake*2-1) + 0.107872214010501*(River*2-1)   -0.11850724516086*(Marine*2-1) + 0.0637584453664667*(Subtidal*2-1)  -0.125587682462504*(Exploited*2-1)))
+ANN_2_log_productivity<-0.0969607344500662+2.43160769021113*ANN_2_H1+4.13746879305335*ANN_2_H2
+
+ANN_3_H1<-tanh(0.5*(-1.6319816271988+0.0669755566582649*log10(Bodymass)  +541.290921703579*1/(273.15+Temperature)  +0.00207336162472834*log10(Depth) + 0.0793856119467608*(Mollusca*2-1) -0.073271619223923*(Annelida*2-1) + 0.0179304187966407*(Crustacea*2-1) + 0.00804476975894962*(Echinodermata*2-1)	-0.0114120134672209*(Insecta*2-1)  +	0.0294042228903891*(Infauna*2-1) -0.0107583713555839*(Sessile*2-1) +	0.0476452286496968*(Crawler*2-1)  -0.0508980140435675*(FacultativeSwimmer*2-1) + 	0.0329039188983383*(Herbivore*2-1)  -0.000034903422110802*(Omnivore*2-1) + 	0.022462687312538*(Carnivore*2-1) -0.0273884119843549*(Lake*2-1) -0.00162149152586038*(River*2-1) + 0.032781910195858*(Marine*2-1) + 0.0272717885244038*(Subtidal*2-1) -0.122450816607498*(Exploited*2-1)))
+ANN_3_H2<-tanh(0.5*(-19.3100729133297+0.555997310503239*log10(Bodymass)  +7334.65307747671*1/(273.15+Temperature) +0.601406844705507*log10(Depth) -1.3271040301786*(Mollusca*2-1) +2.55219282437757*(Annelida*2-1)+ 0.151281030788122*(Crustacea*2-1) +1.01207144922921*(Echinodermata*2-1) +0.183260552204884*(Insecta*2-1)  -0.499968242915697*(Infauna*2-1) + 1.0704531364858*(Sessile*2-1)  -1.22035078601944*(Crawler*2-1) + 0.58951100407599*(FacultativeSwimmer*2-1)  	-0.384940829447965*(Herbivore*2-1)+ 0.549152267551608*(Omnivore*2-1)-0.430231471673855*(Carnivore*2-1)+1.16360457890263*(Lake*2-1) + 	0.207425775853202*(River*2-1)   -0.655900593871265*(Marine*2-1) 	-0.9500254834543*(Subtidal*2-1)  +	2.85432537368618*(Exploited*2-1)))
+ANN_3_log_productivity<-2.298477584719062-6.72624949726075*ANN_3_H1-0.486133411931883*ANN_3_H2
+
+ANN_4_H1<-tanh(0.5*(10.4240621445555-0.552081742936364*log10(Bodymass)  -2952.01725106188*1/(273.15+Temperature)  -0.406755865271079*log10(Depth) +0.451250297547227*(Mollusca*2-1) -1.19411069306617*(Annelida*2-1) + 0.293082376773319*(Crustacea*2-1) + 0.231958620166082*(Echinodermata*2-1)	-0.655983464351776*(Insecta*2-1)  +0.10414239958424*(Infauna*2-1) -0.131223565074228*(Sessile*2-1) +0.0916394428738463*(Crawler*2-1)  +0.123601439213391*(FacultativeSwimmer*2-1) + 	0.1643282356887*(Herbivore*2-1) -0.26953696742991*(Omnivore*2-1) + 	0.226734788399356*(Carnivore*2-1) +0.0545203816114749*(Lake*2-1) -0.374732165672859*(River*2-1) + 	0.281662749708981*(Marine*2-1) +0.495393130602453*(Subtidal*2-1) -0.259127936247385*(Exploited*2-1)))
+ANN_4_H2<-tanh(0.5*(8.95511958069675+0.024984703931267*log10(Bodymass)  -2408.15618550959*1/(273.15+Temperature) +0.334214218893275*log10(Depth) -0.660665254784287*(Mollusca*2-1) +1.02492416669147*(Annelida*2-1)-0.266521551395361*(Crustacea*2-1) -0.410472320157331*(Echinodermata*2-1) +0.721256285700661*(Insecta*2-1)  	-0.195469336164542*(Infauna*2-1) +0.111223481648007*(Sessile*2-1)  -0.0753508784760022*(Crawler*2-1) -0.0520671186752148*(FacultativeSwimmer*2-1)  -0.250316962604273*(Herbivore*2-1)+ 0.227982839841055*(Omnivore*2-1)-0.271259479122788*(Carnivore*2-1)-0.138775104271616*(Lake*2-1)+ 0.424646558817549*(River*2-1)   	-0.310960181605508*(Marine*2-1) 	-0.485502827799313*(Subtidal*2-1)  +	0.64544723926323*(Exploited*2-1)))
+ANN_4_log_productivity<-0.573297079815347+1.38493347803659*ANN_4_H1+1.43616050491323*ANN_4_H2
+
+ANN_5_H1<-tanh(0.5*(6.44738703779204-0.134211349250392*log10(Bodymass)  -2244.82840528908*1/(273.15+Temperature)  -0.170247032833305*log10(Depth) -0.824104064307558*(Mollusca*2-1)+ 0.418935219973673*(Annelida*2-1) -0.444929345422585*(Crustacea*2-1) -1.21260070355951*(Echinodermata*2-1)	+0.357327518124488*(Insecta*2-1)  +0.0180488863461064*(Infauna*2-1) -0.0103729668040701*(Sessile*2-1) -0.044756107024007*(Crawler*2-1)  +0.0408502668307292*(FacultativeSwimmer*2-1) + 	0.00698320971713407*(Herbivore*2-1) +0.0617946269694949*(Omnivore*2-1)  	-0.0110390049331705*(Carnivore*2-1) -0.0388531007634644*(Lake*2-1) +0.138780694765835*(River*2-1) -0.0645507066571633*(Marine*2-1) +0.042713896370113*(Subtidal*2-1) +0.131148454786153*(Exploited*2-1)))
+ANN_5_H2<-tanh(0.5*(-30.4501298231019+1.11107509719652*log10(Bodymass)  +7787.54750983404*1/(273.15+Temperature) -0.157977797954196*log10(Depth) -1.80028833577772*(Mollusca*2-1) +1.93266872178617*(Annelida*2-1)-1.22949783199679*(Crustacea*2-1) -1.69682948451403*(Echinodermata*2-1) +0.848039628073813*(Insecta*2-1)  	+0.128543022937497*(Infauna*2-1) +0.231814348196791*(Sessile*2-1)  -0.153569349644133*(Crawler*2-1) -0.0153321964055926*(FacultativeSwimmer*2-1)  -0.0549674216035533*(Herbivore*2-1)+ 0.22203465931373*(Omnivore*2-1)-0.324927432405611*(Carnivore*2-1)+0.011648748132761*(Lake*2-1)+ 0.329707113071854*(River*2-1)   	-0.334924200339918*(Marine*2-1) 	-0.134445722992521*(Subtidal*2-1)  -	0.244593764667466*(Exploited*2-1)))
+ANN_5_log_productivity<-0.751630085706759+1.58894467732725*ANN_5_H1-0.798592018324774*ANN_5_H2
+
+allfive<-data.frame(ANN_1_log_productivity,ANN_2_log_productivity,ANN_3_log_productivity,ANN_4_log_productivity,ANN_5_log_productivity)
+
+meanlogpb<-rowMeans(allfive)
+
+sdlogpb<-apply(allfive,1,sd)
+
+annual.PtoB<-10^meanlogpb
+lowerCI<-10^(meanlogpb-sdlogpb*0.953)
+upperCI<-10^(meanlogpb+sdlogpb*0.953)
+
+Production_to_Biomass<-cbind(annual.PtoB,lowerCI,upperCI  )
+Production_to_Biomass
+})
+}

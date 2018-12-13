@@ -1,0 +1,10 @@
+Package: BenthicPro
+Type: Package
+Title: Benthic Energy Flow
+Version: 1.0
+Date: 2018-11-08
+Author: Henrike Andresen and Thomas Brey
+Maintainer: Henrike Andresen <henrike.andresen@awi.de>
+Description: Estimates secondary productivity of marine or limnic macrobenthic invertebrate communities
+    from biomass and other specific abiotic and biotic information with an empirical model.
+License: GPL (>= 2)
